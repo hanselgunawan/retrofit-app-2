@@ -14,7 +14,9 @@ import com.hanseltritama.retrofitapplication.model.Comment;
 import com.hanseltritama.retrofitapplication.model.JsonPlaceHolderAPI;
 import com.hanseltritama.retrofitapplication.model.Post;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,13 +37,20 @@ public class MainActivity extends AppCompatActivity {
 
         jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
 
-        //  getPosts();
-        getComments();
+          getPosts();
+        //getComments();
     }
 
     public void getPosts() {
 
-        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts();
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("userId", "1");
+        parameters.put("_sort", "id");
+        parameters.put("_order", "desc");
+
+//        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts(new Integer[]{4,5,6}, "id", "desc");
+
+        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts(parameters);
 
         call.enqueue(new Callback<List<Post>>() {
             @Override
@@ -74,7 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void getComments() {
 
-        Call<List<Comment>> call = jsonPlaceHolderAPI.getComments();
+//        Call<List<Comment>> call = jsonPlaceHolderAPI.getComments(2);
+
+        Call<List<Comment>> call = jsonPlaceHolderAPI.getComments("posts/1/comments");
 
         call.enqueue(new Callback<List<Comment>>() {
             @Override
