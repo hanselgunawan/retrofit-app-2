@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -29,5 +34,22 @@ public interface JsonPlaceHolderAPI {
 
     @GET
     Call<List<Comment>> getComments(@Url String url);
+
+    @POST("posts")
+    Call<Post> createPost(@Body Post post);
+
+    @FormUrlEncoded // it will send something like userId=23&title=new%20title&body=hahaha to the server
+    @POST("posts")
+    Call<Post> createPost(
+            @Field("userId") int userId,
+            @Field("title") String title,
+            @Field("body") String text
+    );
+
+    @FormUrlEncoded
+    @POST("posts")
+    Call<Post> createPost(
+            @FieldMap Map<String, String> fields
+    ); 
 
 }
