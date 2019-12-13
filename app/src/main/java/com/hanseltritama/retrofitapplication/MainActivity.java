@@ -119,9 +119,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createPost() {
-        Post post = new Post(23, "Hansel", "Hello hello hello!");
+//        Post post = new Post(23, "Hansel", "Hello hello hello!");
 
-        Call<Post> call = jsonPlaceHolderAPI.createPost(post);
+        Map<String, String> fields = new HashMap<>();
+        fields.put("userId", "25");
+        fields.put("title", "New Title");
+
+        Call<Post> call = jsonPlaceHolderAPI.createPost(fields);
 
         call.enqueue(new Callback<Post>() {
             @Override
