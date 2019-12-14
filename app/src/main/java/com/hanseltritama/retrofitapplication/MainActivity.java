@@ -1,6 +1,8 @@
 package com.hanseltritama.retrofitapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,9 +32,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textViewResult = findViewById(R.id.text_view_result);
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create()) // setting your chosen converter
+                .client(okHttpClient)
                 .build();
 
         jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
@@ -40,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 //          getPosts();
 //        getComments();
 //        createPost();
-//        updatePost();
-        deletePost();
+        updatePost();
+//        deletePost();
     }
 
     public void getPosts() {
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     public void updatePost() {
 
         Post post = new Post(2, null, "New Text");
-        Call<Post> call = jsonPlaceHolderAPI.patchPost(55, post);
+        Call<Post> call = jsonPlaceHolderAPI.putPost(55, post);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
